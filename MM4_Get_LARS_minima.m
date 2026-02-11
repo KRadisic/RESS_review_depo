@@ -1,11 +1,10 @@
 %% Get the basis union A
 clearvars
 rng(100,'twister')
-cd '/home/katarina.radisic/UQLab_Rel2.0.0/core/'
+cd /Users/icj_ecl/Documents/UQLab_Rel2.1.0/core/
 uqlab
-output_folder='/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels';
-code_folder = '/home/katarina.radisic/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/2_Robustness_scripts_Abasis';
-data_folder = '/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw';
+output_folder='/Users/icj_ecl/Documents/RESS_review_depo/metamodels/';
+data_folder = '/Users/icj_ecl/Documents/RESS_review_depo/'; %/data/raw
 
 %% Set data
 R=500; 
@@ -14,13 +13,11 @@ name_train = strcat('LHS_rep5_50_R',int2str(R));
 %% Set parameters considered
 vector_input_indices = [63,68,72,99,71,65];
 %straring from 0 the indices of zA and zB;  0 - 0, 1 - 53, 2 - 54
-N_tot_test = 100; % number of simulations after which the rain changes 
 N_train = 50; % number of simulations after which the rain changes 
 % fix the index at which we consider the "true" rain observation is coming
 % from (taken from the "test" set)
 % for zA (54) the correct true test idx should be 5401
 % for zB (53) 5301
-N_train =50;
 N_tot_train =50;
 weighted = 0;
 true_rain_idx = 53;
@@ -32,7 +29,7 @@ f_min_LARS = zeros(R,1);
 beta = 0.005;
 str_beta = '005';
 
-for rain_idx = 1:500
+for rain_idx = 1:200 % loop on train rains
     cd(output_folder)
     load(strcat('myPCE_LARS_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta,'_Ridx', int2str(rain_idx),'_503'));
     evaluate_pce_handle = @(x) uq_evalModel(myPCE_LARS,x);

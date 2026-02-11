@@ -8,17 +8,16 @@
 
 clearvars
 rng(100,'twister')
-cd '/home/katarina.radisic/UQLab_Rel2.0.0/core/'
+cd /Users/icj_ecl/Documents/UQLab_Rel2.1.0/core/
 uqlab
-output_folder='/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels';
-code_folder = '/home/katarina.radisic/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/2_Robustness_scripts_Abasis';
-data_folder = '/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw';
+output_folder='/Users/icj_ecl/Documents/RESS_review_depo/metamodels/';
+data_folder = '/Users/icj_ecl/Documents/RESS_review_depo/'; %/data/raw
 
 %% Set data for the experimental design of the training set
 parcel_names = [545,530,480,503,526,527,481,524,525,529,544,539,528,523];
 R=500; 
 R_train = 1:200; % rain realizations for training
-R_test = 201:499; % rain realizations used tof testing PCE metamodels
+R_test = 201:499; % rain realizations used for testing PCE metamodels
 N_tot_train = 50; % number of simulations after which the rain changes 
 
 name_train = strcat('LHS_rep5_50_R',int2str(R)); 
@@ -97,28 +96,26 @@ myInput1 = uq_createInput(InputOpts1);
 beta = 0.005;
 str_beta = '005';
 %%
-for N_train = 50 %45:5:50 % number of simulation for PCE fitting
-    for r = 1:200 %1:198 % number of cost functions to minimize
+N_train = 50 % number of simulation for PCE fitting
+for r = 1:200 % number of cost functions to minimize
 
-        % add Jb on the cost function !!!!!!!!!!
-        expdes_J_train = ((lhs_y_train(1:n_lhs_train,:) - ones(n_lhs_train,1)*y_true).^2)*weights' + ...
-            beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_train(1:n_lhs_train,68)- Marginals.Parameters{:,68}(1)).^2+ ...
-            beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_train(1:n_lhs_train,71)- Marginals.Parameters{:,71}(1)).^2;
-        % fit and save PCE MM
-            name_file = strcat('pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta,'_Ridx', int2str(r));
-            cd(code_folder)
-            calculate_LARS_PCE_parcel(parcel_names(plot_idx),name_file, ...
-                expdes_x_train(((r-1)*N_tot_train+1):((r-1)*N_tot_train+N_train),:), ...
-                expdes_J_train(((r-1)*N_tot_train+1):((r-1)*N_tot_train+N_train)),14,1, ...
-                output_folder);
-    end
+    % add Jb on the cost function !!!!!!!!!!
+    expdes_J_train = ((lhs_y_train(1:n_lhs_train,:) - ones(n_lhs_train,1)*y_true).^2)*weights' + ...
+        beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_train(1:n_lhs_train,68)- Marginals.Parameters{:,68}(1)).^2+ ...
+        beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_train(1:n_lhs_train,71)- Marginals.Parameters{:,71}(1)).^2;
+    % fit and save PCE MM
+        name_file = strcat('pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta,'_Ridx', int2str(r));
+        cd(data_folder)
+        calculate_LARS_PCE_parcel(parcel_names(plot_idx),name_file, ...
+            expdes_x_train(((r-1)*N_tot_train+1):((r-1)*N_tot_train+N_train),:), ...
+            expdes_J_train(((r-1)*N_tot_train+1):((r-1)*N_tot_train+N_train)),14,1, ...
+            output_folder);
 end
-
 %% Get R2 on train set of all the PCE metamodels
 coeff_R2_rains = []
 figure
 
-for r = 1:200%1:198 % number of cost functions to minimize
+for r = 1:200 % number of cost functions to minimize
     cd(output_folder)
     load(strcat('myPCE_LARS_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta,'_Ridx', int2str(r),'_503.mat'))
     % get R2
@@ -137,46 +134,46 @@ find(coeff_R2_rains<0.95)
 coeff_R2_rains(coeff_R2_rains<0.95)
 
 
-%% Get R2 on metamodels (validate on the test set available)
+%% Get Q2 on metamodels (validate on the test set available)
 all_Q2_rains = []; N_tot_test = 100;
 N_valid = 100;      % number of simulation used for PCE fitting
 N_tot_valid = 100;  % number of simulations after which the rain changes
 
 figure
-for N_train = 50 % 45:5:50
-    coeff_Q2_rains = [];
-    R_temp = 200; 
+
+N_train = 50 % 45:5:50
+coeff_Q2_rains = [];
+R_temp = 200; 
+
+for rain_idx = 1:R_temp  
+    % adapt cost function with Jb
+     expdes_J_validation = ((lhs_y_validation(1:n_lhs_validation,:) - ones(n_lhs_validation,1)*y_true).^2)*weights' + ...
+        beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,68)- Marginals.Parameters{:,68}(1)).^2+ ...
+        beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,71)- Marginals.Parameters{:,71}(1)).^2;
     
-    for rain_idx = 1:R_temp  
-        % adapt cost function with Jb
-         expdes_J_validation = ((lhs_y_validation(1:n_lhs_validation,:) - ones(n_lhs_validation,1)*y_true).^2)*weights' + ...
-            beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,68)- Marginals.Parameters{:,68}(1)).^2+ ...
-            beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,71)- Marginals.Parameters{:,71}(1)).^2;
-        
-        cd(output_folder)
-        load(strcat('myPCE_LARS_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx), ...
-            '_Jb',str_beta,'_Ridx', int2str(rain_idx),'_503.mat'))
-        
-        Xval = expdes_x_validation((2+(rain_idx-1)*N_tot_test):(rain_idx*N_tot_test),:); 
-        Jval = expdes_J_validation((2+(rain_idx-1)*N_tot_test):(rain_idx*N_tot_test));
-        JLARS = uq_evalModel(myPCE_LARS,Xval);
-        %figure
-        hold on
-        plot(Jval,JLARS,'bo')
-        SSE = sum((Jval - JLARS).^2); 
-        SST = sum((Jval-mean(Jval)).^2);
-        coeff_Q2 = 1 - SSE/SST
-        coeff_Q2_rains = [coeff_Q2_rains,coeff_Q2];
-    end
-    all_Q2_rains = [all_Q2_rains, coeff_Q2_rains'];
+    cd(output_folder)
+    load(strcat('myPCE_LARS_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx), ...
+        '_Jb',str_beta,'_Ridx', int2str(rain_idx),'_503.mat'))
+    
+    Xval = expdes_x_validation((2+(rain_idx-1)*N_tot_test):(rain_idx*N_tot_test),:); 
+    Jval = expdes_J_validation((2+(rain_idx-1)*N_tot_test):(rain_idx*N_tot_test));
+    JLARS = uq_evalModel(myPCE_LARS,Xval);
+    %figure
+    hold on
+    plot(Jval,JLARS,'bo')
+    SSE = sum((Jval - JLARS).^2); 
+    SST = sum((Jval-mean(Jval)).^2);
+    coeff_Q2 = 1 - SSE/SST
+    coeff_Q2_rains = [coeff_Q2_rains,coeff_Q2];
 end
+all_Q2_rains = [all_Q2_rains, coeff_Q2_rains'];
+
 plot(xlim,ylim,'-k', 'LineWidth',1)
 
-%%
 %% Plot the Q2
 %for i = 1:198
-    hist(all_Q2_rains);
-    find(all_Q2_rains < 0.90 ) % same bad metamodels as in 1st case, probably some bad simulations.
+%    hist(all_Q2_rains);
+%    find(all_Q2_rains < 0.90 ) % same bad metamodels as in 1st case, probably some bad simulations.
 %end
 %xlabel('N_{train}'); ylabel('R2'); title('R2 of each metamodel conditioned on false rain')
 cd(output_folder)

@@ -4,11 +4,10 @@
 % coming from the true parameter and the true rain.
 clearvars
 rng(100,'twister')
-cd '/home/katarina.radisic/UQLab_Rel2.0.0/core/'
+cd /Users/icj_ecl/Documents/UQLab_Rel2.1.0/core/
 uqlab
-output_folder='/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels';
-code_folder = '/home/katarina.radisic/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/2_Robustness_scripts_Abasis';
-data_folder = '/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw';
+output_folder='/Users/icj_ecl/Documents/RESS_review_depo/metamodels/';
+data_folder = '/Users/icj_ecl/Documents/RESS_review_depo/'; %/data/raw
 
 %% Set data for the experimental design of the training set
 parcel_names = [545,530,480,503,526,527,481,524,525,529,544,539,528,523];
@@ -80,25 +79,33 @@ weights = ones(1,length(depths)); % depths
 %% Project VALIDATION set on the OLS basis
 N_valid = 100;      % number of simulation used for PCE fitting
 N_tot_valid = 100;  % number of simulations after which the rain changes
-N_boot = 100;       % number of bootstrap evalutions on OLS
 
-for n_boot = 1:Nboot
-    for r = 1:499 %1:198 % number of cost functions to minimize
+figure
+for r = 1:499 % number of cost functions
+
+    % add Jb on the cost function !!!!!!!!!!
+    expdes_J_validation = ((lhs_y_validation(1:n_lhs_validation,:) - ones(n_lhs_validation,1)*y_true).^2)*weights' + ...
+        beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,68)- Marginals.Parameters{:,68}(1)).^2+ ...
+        beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,71)- Marginals.Parameters{:,71}(1)).^2;
     
-        % add Jb on the cost function !!!!!!!!!!
-        expdes_J_validation = ((lhs_y_validation(1:n_lhs_validation,:) - ones(n_lhs_validation,1)*y_true).^2)*weights' + ...
-            beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,68)- Marginals.Parameters{:,68}(1)).^2+ ...
-            beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation(1:n_lhs_validation,71)- Marginals.Parameters{:,71}(1)).^2;
-        
-        NX_bootstrp_idx = ((r-1)*N_tot_valid+1):((r-1)*N_tot_valid+N_valid)
+    NX_idx = ((r-1)*N_tot_valid+1):((r-1)*N_tot_valid+N_valid)
 
-        % fit and save PCE MM
-            name_file = strcat('TEST_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta, ...
-                '_Ridx', int2str(r), '_Nboot', int2str(n_boot));
-            cd(code_folder)
-            calculate_OLS_PCE_parcel(parcel_names(plot_idx),name_file, ...
-                expdes_x_validation(NX_bootstrp_idx,:), ...
-                expdes_J_validation(NX_bootstrp_idx),14,1, ...
-                A_OLS_union.a_reduced, output_folder);
+    % fit and save PCE MM
+        name_file = strcat('TEST_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta, ...
+            '_Ridx', int2str(r));
+        cd(data_folder)
+
+    X_temp = expdes_x_validation(NX_idx,:);
+    Y_temp = expdes_J_validation(NX_idx);
+    
+%    calculate_OLS_PCE_parcel(parcel_names(plot_idx),name_file, ...
+%        X_temp, Y_temp,14,1, ...
+%        A_OLS_union.a_reduced, output_folder);
+
+    for i = 1:6
+        subplot(2,3,i)
+        hold on
+        plot(X_temp(:,i), Y_temp,'bx')
     end
+
 end

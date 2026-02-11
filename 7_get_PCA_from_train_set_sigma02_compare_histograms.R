@@ -8,9 +8,11 @@
 ###     TO DO : COMPARE QUALITY OF MARGINAL DISTIBUTIONS FOR DIFFERENT ZONES.
 
 rm(list=ls())
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_libraries.R")
-metamodel_folder <- '~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels/'
+#source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
+
+library('ggplot2')
+library('GGally')
+metamodel_folder <- '~/Documents/RESS_review_depo/metamodels/'
 figures_plot <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/figures/"
 excursion_set_results <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/processed/excursion_sets/"
 
