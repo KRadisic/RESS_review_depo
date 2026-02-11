@@ -1,0 +1,145 @@
+bd_2,    'soilhorizon_bd_2     ',interm.,UC1,bd
+hg_2,    'soilhorizon_hg_2     ',interm.,UC1,hg
+Ks_2,    'soilhorizon_Ks_2     ',interm.,UC1,Ks
+Kx_2,    'soilhorizon_Kx_2     ',interm.,UC1,Kx
+mn_2,    'soilhorizon_mn_2     ',interm.,UC1,mn
+moc_2,    'soilhorizon_moc_2    ',interm.,UC1,moc
+pore_2,    'soilhorizon_pore_2   ',interm.,UC1,pore
+thetar_2,    'soilhorizon_thetar_2 ',interm.,UC1,thetar
+thetas_2,    'soilhorizon_thetas_2 ',interm.,UC1,thetas
+bd_3,    'soilhorizon_bd_3     ',interm.,UC1,bd
+hg_3,    'soilhorizon_hg_3     ',interm.,UC1,hg
+Ks_3,    'soilhorizon_Ks_3     ',interm.,UC1,Ks
+Kx_3,    'soilhorizon_Kx_3     ',interm.,UC1,Kx
+mn_3,    'soilhorizon_mn_3     ',interm.,UC1,mn
+moc_3,    'soilhorizon_moc_3    ',interm.,UC1,moc
+pore_3,    'soilhorizon_pore_3   ',interm.,UC1,pore
+thetar_3,    'soilhorizon_thetar_3 ',interm.,UC1,thetar
+thetas_3,    'soilhorizon_thetas_3 ',interm.,UC1,thetas
+bd_4,    'soilhorizon_bd_4     ',deep,UC1,bd
+hg_4,    'soilhorizon_hg_4     ',deep,UC1,hg
+Ks_4,    'soilhorizon_Ks_4     ',deep,UC1,Ks
+Kx_4,    'soilhorizon_Kx_4     ',deep,UC1,Kx
+mn_4,    'soilhorizon_mn_4     ',deep,UC1,mn
+moc_4,    'soilhorizon_moc_4    ',deep,UC1,moc
+pore_4,    'soilhorizon_pore_4   ',deep,UC1,pore
+thetar_4,    'soilhorizon_thetar_4 ',deep,UC1,thetar
+thetas_4,    'soilhorizon_thetas_4 ',deep,UC1,thetas
+bd_6,    'soilhorizon_bd_6     ',interm.,UC2,bd
+hg_6,    'soilhorizon_hg_6     ',interm.,UC2,hg
+Ks_6,    'soilhorizon_Ks_6     ',interm.,UC2,Ks
+Kx_6,    'soilhorizon_Kx_6     ',interm.,UC2,Kx
+mn_6,    'soilhorizon_mn_6     ',interm.,UC2,mn
+moc_6,    'soilhorizon_moc_6    ',interm.,UC2,moc
+pore_6,    'soilhorizon_pore_6   ',interm.,UC2,pore
+thetar_6,    'soilhorizon_thetar_6 ',interm.,UC2,thetar
+thetas_6,    'soilhorizon_thetas_6 ',interm.,UC2,thetas
+bd_7,    'soilhorizon_bd_7     ',interm.,UC2,bd
+hg_7,    'soilhorizon_hg_7     ',interm.,UC2,hg
+Ks_7,    'soilhorizon_Ks_7     ',interm.,UC2,Ks
+Kx_7,    'soilhorizon_Kx_7     ',interm.,UC2,Kx
+mn_7,    'soilhorizon_mn_7     ',interm.,UC2,mn
+moc_7,    'soilhorizon_moc_7    ',interm.,UC2,moc
+pore_7,    'soilhorizon_pore_7   ',interm.,UC2,pore
+thetar_7,    'soilhorizon_thetar_7 ',interm.,UC2,thetar
+thetas_7,    'soilhorizon_thetas_7 ',interm.,UC2,thetas
+bd_8,    'soilhorizon_bd_8     ',deep,UC2,bd
+hg_8,    'soilhorizon_hg_8     ',deep,UC2,hg
+Ks_8,    'soilhorizon_Ks_8     ',deep,UC2,Ks
+Kx_8,    'soilhorizon_Kx_8     ',deep,UC2,Kx
+mn_8,    'soilhorizon_mn_8     ',deep,UC2,mn
+moc_8,    'soilhorizon_moc_8    ',deep,UC2,moc
+pore_8,    'soilhorizon_pore_8   ',deep,UC2,pore
+thetar_8,    'soilhorizon_thetar_8 ',deep,UC2,thetar
+thetas_8,    'soilhorizon_thetas_8 ',deep,UC2,thetas
+bd_9,    'soilhorizon_bd_9     ',interm.,UC3,bd
+hg_9,    'soilhorizon_hg_9     ',interm.,UC3,hg
+Ks_9,    'soilhorizon_Ks_9     ',interm.,UC3,Ks
+Kx_9,    'soilhorizon_Kx_9     ',interm.,UC3,Kx
+mn_9,    'soilhorizon_mn_9     ',interm.,UC3,mn
+moc_9,    'soilhorizon_moc_9    ',interm.,UC3,moc
+pore_9,    'soilhorizon_pore_9   ',interm.,UC3,pore
+thetar_9,    'soilhorizon_thetar_9 ',interm.,UC3,thetar
+thetas_9,    'soilhorizon_thetas_9 ',interm.,UC3,thetas
+bd_10,    'soilhorizon_bd_10    ',deep,UC3,bd
+hg_10,    'soilhorizon_hg_10    ',deep,UC3,hg
+Ks_10,    'soilhorizon_Ks_10    ',deep,UC3,Ks
+Kx_10,    'soilhorizon_Kx_10    ',deep,UC3,Kx
+mn_10,    'soilhorizon_mn_10    ',deep,UC3,mn
+moc_10,    'soilhorizon_moc_10   ',deep,UC3,moc
+pore_10,    'soilhorizon_pore_10  ',deep,UC3,pore
+thetar_10,    'soilhorizon_thetar_10',deep,UC3,thetar
+thetas_10,    'soilhorizon_thetas_10',deep,UC3,thetas
+bd_11,    'soilhorizon_bd_11    ',surf.,UC1,bd
+hg_11,    'soilhorizon_hg_11    ',surf.,UC1,hg
+Ks_11,    'soilhorizon_Ks_11    ',surf.,UC1,Ks
+Kx_11,    'soilhorizon_Kx_11    ',surf.,UC1,Kx
+mn_11,    'soilhorizon_mn_11    ',surf.,UC1,mn
+moc_11,    'soilhorizon_moc_11   ',surf.,UC1,moc
+pore_11,    'soilhorizon_pore_11  ',surf.,UC1,pore
+thetar_11,    'soilhorizon_thetar_11',surf.,UC1,thetar
+thetas_11,    'soilhorizon_thetas_11',surf.,UC1,thetas
+bd_12,    'soilhorizon_bd_12    ',surf.,UC2,bd
+hg_12,    'soilhorizon_hg_12    ',surf.,UC2,hg
+Ks_12,    'soilhorizon_Ks_12    ',surf.,UC2,Ks
+Kx_12,    'soilhorizon_Kx_12    ',surf.,UC2,Kx
+mn_12,    'soilhorizon_mn_12    ',surf.,UC2,mn
+moc_12,    'soilhorizon_moc_12   ',surf.,UC2,moc
+pore_12,    'soilhorizon_pore_12  ',surf.,UC2,pore
+thetar_12,    'soilhorizon_thetar_12',surf.,UC2,thetar
+thetas_12,    'soilhorizon_thetas_12',surf.,UC2,thetas
+bd_13,    'soilhorizon_bd_13    ',surf.,UC3,bd
+hg_13,    'soilhorizon_hg_13    ',surf.,UC3,hg
+Ks_13,    'soilhorizon_Ks_13    ',surf.,UC3,Ks
+Kx_13,    'soilhorizon_Kx_13    ',surf.,UC3,Kx
+mn_13,    'soilhorizon_mn_13    ',surf.,UC3,mn
+moc_13,    'soilhorizon_moc_13   ',surf.,UC3,moc
+pore_13,    'soilhorizon_pore_13  ',surf.,UC3,pore
+thetar_13,    'soilhorizon_thetar_13',surf.,UC3,thetar
+thetas_13,    'soilhorizon_thetas_13',surf.,UC3,thetas
+bd_14,    'soilhorizon_bd_14    ',surf.,UC1,bd
+hg_14,    'soilhorizon_hg_14    ',surf.,UC1,hg
+Ks_14,    'soilhorizon_Ks_14    ',surf.,UC1,Ks
+Kx_14,    'soilhorizon_Kx_14    ',surf.,UC1,Kx
+mn_14,    'soilhorizon_mn_14    ',surf.,UC1,mn
+moc_14,    'soilhorizon_moc_14   ',surf.,UC1,moc
+pore_14,    'soilhorizon_pore_14  ',surf.,UC1,pore
+thetar_14,    'soilhorizon_thetar_14',surf.,UC1,thetar
+thetas_14,    'soilhorizon_thetas_14',surf.,UC1,thetas
+bd_15,    'soilhorizon_bd_15    ',surf.,UC2,bd
+hg_15,    'soilhorizon_hg_15    ',surf.,UC2,hg
+Ks_15,    'soilhorizon_Ks_15    ',surf.,UC2,Ks
+Kx_15,    'soilhorizon_Kx_15    ',surf.,UC2,Kx
+mn_15,    'soilhorizon_mn_15    ',surf.,UC2,mn
+moc_15,    'soilhorizon_moc_15   ',surf.,UC2,moc
+pore_15,    'soilhorizon_pore_15  ',surf.,UC2,pore
+thetar_15,    'soilhorizon_thetar_15',surf.,UC2,thetar
+thetas_15,    'soilhorizon_thetas_15',surf.,UC2,thetas
+bd_16,    'soilhorizon_bd_16    ',surf.,UC3,bd
+hg_16,    'soilhorizon_hg_16    ',surf.,UC3,hg
+Ks_16,    'soilhorizon_Ks_16    ',surf.,UC3,Ks
+Kx_16,    'soilhorizon_Kx_16    ',surf.,UC3,Kx
+mn_16,    'soilhorizon_mn_16    ',surf.,UC3,mn
+moc_16,    'soilhorizon_moc_16   ',surf.,UC3,moc
+pore_16,    'soilhorizon_pore_16  ',surf.,UC3,pore
+thetar_16,    'soilhorizon_thetar_16',surf.,UC3,thetar
+thetas_16,    'soilhorizon_thetas_16',surf.,UC3,thetas
+veget_manning_1,    'veget_manning_1      ',veget,veget,veget
+veget_LAImin_1,    'veget_LAImin_1       ',veget,veget,veget
+veget_LAImax_1,    'veget_LAImax_1       ',veget,veget,veget
+veget_LAIharv_1,    'veget_LAIharv_1      ',veget,veget,veget
+veget_F10_1,    'veget_F10_1          ',veget,veget,veget
+veget_Zr_1,    'veget_Zr_1           ',veget,veget,veget
+veget_manning_2,    'veget_manning_2      ',veget,veget,veget
+veget_F10_2,    'veget_F10_2          ',veget,veget,veget
+veget_LAI_2,    'veget_LAI_2          ',veget,veget,veget
+veget_Zr_2,    'veget_Zr_2           ',veget,veget,veget
+pest_DT50_1,    'pest_DT50_1          ',pest,pest,pest
+pest_Koc_1,    'pest_Koc_1           ',pest,pest,pest
+hu_adsorpthick,    'hu_adsorpthick       ',hu_adsorpthick,hu_adsorpthick,hu_adsorpthick
+plot_hpond,    'plot_hpond           ',plot_hpond,plot_hpond,plot_hpond
+vfz_hpond,    'vfz_hpond            ',vfz_hpond,vfz_hpond,vfz_hpond
+river_manning,    'river_manning        ',river,river,river
+river_hpond,    'river_hpond          ',river,river,river
+river_di,    'river_di             ',river,river,river
+river_ks,    'river_ks             ',river,river,river
