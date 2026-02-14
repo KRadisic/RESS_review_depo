@@ -39,7 +39,12 @@ size(expdes_x_train)
 cd(data_folder)
 lhs_x_validation = readNPY(strcat('LHS25_100_R500_dim6_sample_final.npy'));
 lhs_y_validation = readNPY(strcat('Ymoisture_profile_LHS25_100_R499_dim6_YzeronS06_LogN02.npy'));
-
+% lhs_y_validation((100*(200-1)+91),1:25) corresponds to sample0 new simus
+% lhs_y_validation((100*(200-1)+92),1:25) corresponds to sample1 new simus
+% lhs_y_validation((100*(200-1)+93),1:25) corresponds to sample2 new simus
+% lhs_y_validation((100*(201-1)+91),1:25) corresponds to sample(110*rainidx+nidx-90-1) new simus
+% lhs_y_validation((100*(201-1)+91),1:25) corresponds to sample(110*1+91-90-1) new simus
+% lhs_y_validation((100*(317-1)+97),1:25) corresponds to sample(110*(317-200)+97-90-1) new simus
 if (size(lhs_x_validation,1) == size(lhs_y_validation,1) + 100) % removed last 100 as nominal rain
     n_lhs_validation = size(lhs_y_validation,1);
 else
