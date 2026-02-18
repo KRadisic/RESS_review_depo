@@ -51,23 +51,27 @@ writematrix(c_alpha_validation,strcat('ml_multicoeff_c_alpha_OLS_TEST_of_R500_Nt
 N_valid_boot = 8
 concat_c_alpha_validation_boot = [];
 
-for n_boot = 1:8
-    
-    % for a fixed bootstrap sample, get and concatenate c_aplha of all traj
-    c_alpha_validation_boot = [];
-
-    for rain_idx = 201:499
-
-        cd(output_folder)
-        load(strcat('myPCE_OLS_TESTADD_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb',str_beta, ...
-            '_Ridx', int2str(rain_idx), '_boot', int2str(n_boot), '_of', int2str(N_valid_boot),'_503.mat'),'myPCE_OLS');
+for Nx_valid = [50, 100]     % number of simulation used for PCE fitting
+ 
+    for n_boot = 1:N_valid_boot
         
-        c_alpha_validation_boot = [c_alpha_validation_boot, [myPCE_OLS.PCE.Coefficients; n_boot]];
-   
+        % for a fixed bootstrap sample, get and concatenate c_aplha of all traj
+        c_alpha_validation_boot = [];
+        for rain_idx = 201:499
+    
+            cd(output_folder)
+            load(strcat('myPCE_OLS_TEST_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb',str_beta, ...
+                '_Ridx', int2str(rain_idx), '_boot', int2str(n_boot), '_of', int2str(N_valid_boot), ...
+                'Nx_valid', int2str(Nx_valid),'_503.mat'),'myPCE_OLS');
+            
+            c_alpha_validation_boot = [c_alpha_validation_boot, [myPCE_OLS.PCE.Coefficients; n_boot]];
+       
+        end
+        concat_c_alpha_validation_boot = [concat_c_alpha_validation_boot, c_alpha_validation_boot];
     end
-    concat_c_alpha_validation_boot = [concat_c_alpha_validation_boot, c_alpha_validation_boot];
-end
+    
+    % Save the c_alpha for this nboot
+    writematrix(concat_c_alpha_validation_boot,strcat(['ml_boot_multicoeff_c_alpha_OLS_TESTADD_of_R500_' ...
+        'Ntrain50_dim6_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb'],str_beta,'Nx_valid', int2str(Nx_valid),'.csv')) 
 
-%% Save the c_alpha for this nboot
-writematrix(concat_c_alpha_validation_boot,strcat(['ml_boot_multicoeff_c_alpha_OLS_TESTADD_of_R500_' ...
-    'Ntrain50_dim6_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb'],str_beta,'.csv')) 
+end

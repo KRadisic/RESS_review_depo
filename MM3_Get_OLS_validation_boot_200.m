@@ -120,40 +120,42 @@ size(lhs_y_validation_add)
 size(lhs_x_validation_add)
 
 %% Project VALIDATION set on the OLS basis
-N_valid = 100;      % number of simulation used for PCE fitting
+%Nx_valid = 100;      % number of simulation used for PCE fitting
 N_valid_boot = 8;  % number of bootstraps (how many subsets of 50 points out of 100 we take) 
 N_tot_valid = 200;  % number of simulations after which the rain changes
 
-n_lhs_validation_add = 59800
+n_lhs_validation_add = 59800;
 
-figure
-for i_boot = 1:N_valid_boot % idx of bootstrap
-    NX_idx_boot = randperm(N_tot_valid, N_valid) % randomly choose 50 indices without repetition from 100
-    % indexing starts from 1, goes to 100
-    
-    for r = 1:299 % number of cost functions
-        % add Jb on the cost function !!!!!!!!!!
-        expdes_J_validation = ((lhs_y_validation_add(1:n_lhs_validation_add,:) - ones(n_lhs_validation_add,1)*y_true).^2)*weights' + ...
-            beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation_addo(1:n_lhs_validation_add,68)- Marginals.Parameters{:,68}(1)).^2+ ...
-            beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation_add(1:n_lhs_validation_add,71)- Marginals.Parameters{:,71}(1)).^2;
+for Nx_valid = [50, 100]     % number of simulation used for PCE fitting
+    figure
+    for i_boot = 1:N_valid_boot % idx of bootstrap
+        NX_idx_boot = randperm(N_tot_valid, Nx_valid) % randomly choose Nx_valid indices without repetition from N_tot_valid
+        % indexing starts from 1, goes to 100
         
-        NX_idx = ((r-1) * N_tot_valid + NX_idx_boot)
-    
-        % fit and save PCE MM
-        name_file = strcat('TESTADD_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta, ...
-            '_Ridx', int2str(r+200), '_boot', int2str(i_boot), '_of', int2str(N_valid_boot));
-    
-        X_temp = expdes_x_validation_add(NX_idx,:);
-        Y_temp = expdes_J_validation(NX_idx);
+        for r = 1:299 % number of cost functions
+            % add Jb on the cost function !!!!!!!!!!
+            expdes_J_validation = ((lhs_y_validation_add(1:n_lhs_validation_add,:) - ones(n_lhs_validation_add,1)*y_true).^2)*weights' + ...
+                beta * 1/Marginals.Parameters{:,68}(2).^2 *  (lhs_x_validation_add(1:n_lhs_validation_add,68)- Marginals.Parameters{:,68}(1)).^2+ ...
+                beta * 1/Marginals.Parameters{:,71}(2).^2 *  (lhs_x_validation_add(1:n_lhs_validation_add,71)- Marginals.Parameters{:,71}(1)).^2;
+            
+            NX_idx = ((r-1) * N_tot_valid + NX_idx_boot)
         
-        cd(data_folder)
-        calculate_OLS_PCE_parcel(parcel_names(plot_idx),name_file, ...
-        X_temp, Y_temp,14,1, A_OLS_union.a_reduced, output_folder);
+            % fit and save PCE MM
+            name_file = strcat('TEST_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx),'_Jb',str_beta, ...
+                '_Ridx', int2str(r+200), '_boot', int2str(i_boot), '_of', int2str(N_valid_boot), 'Nx_valid', int2str(Nx_valid));
         
-        for i = 1:6
-            subplot(2,3,i)
-            hold on
-            plot(X_temp(:,i), Y_temp,'bx')
+            X_temp = expdes_x_validation_add(NX_idx,:);
+            Y_temp = expdes_J_validation(NX_idx);
+            
+            cd(data_folder)
+            calculate_OLS_PCE_parcel(parcel_names(plot_idx),name_file, ...
+            X_temp, Y_temp,14,1, A_OLS_union.a_reduced, output_folder);
+            
+            for i = 1:6
+                subplot(2,3,i)
+                hold on
+                plot(X_temp(:,i), Y_temp,'bx')
+            end
         end
     end
 end
