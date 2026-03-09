@@ -1,2 +1,4 @@
+*.pdf
+*.pdf
 /metamodels/*
 /venv_ress/*
