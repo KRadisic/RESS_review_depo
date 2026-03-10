@@ -33,12 +33,15 @@ df <- data.frame(rbind(plotting_data_train, plotting_data_test))#, plotting_data
 df <- data.frame(as.numeric(df[,1]),as.numeric(df[,2]),as.numeric(df[,3]),
                       as.numeric(df[,4]),as.numeric(df[,5]),as.numeric(df[,6]),'type' = df[,7])
 colnames(df) <- c(names$V1[indices_6_parms], 'type')
-head(df)
+df$type <- as.factor(df$type) 
 
-## Pair plot for raw train and test set.
-ggpairs(df,aes(pch = type,color = type, alpha = 0.5), columns = c(1:6),
+## Pair plot for raw train and test set. #c('train' = "#7570b3", 'test' = "#1b9e77") 
+ggpairs(df, aes(color = type, alpha = 0.5), columns = c(1:6), legend = 2,
         lower = list(continuous = wrap("points", alpha = 0.5, size=1, pch = 1), 
                      combo = wrap("dot", alpha = 0.4, size=0.2) ),
         upper = list(continuous = wrap("points", alpha = 0.5, size=1, pch = 1), 
                      combo = wrap("dot", alpha = 0.4, size=0.2) )) +theme_bw() +
-  theme(legend.position = 'bottom') 
+        scale_color_manual(breaks = c("test", "train"), values = c("#1b9e77", "#7570b3")) + # density plots
+        scale_fill_manual(breaks = c("test", "train"), values = c("#1b9e77", "#7570b3")) + # diagonal fill
+        theme(legend.position = "bottom")
+
