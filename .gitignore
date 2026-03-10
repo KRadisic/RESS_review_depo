@@ -1,4 +1,6 @@
-*.pdf
+ml_boot*.csv
+Ymoisture*.npy
+LHS*.npy
 *.pdf
 /metamodels/*
 /venv_ress/*
