@@ -1,3 +1,6 @@
+*.aux
+*.log
+*.tex
 output_figures_b*
 *.RData
 ml_boot*.csv

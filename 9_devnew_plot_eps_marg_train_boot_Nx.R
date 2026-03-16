@@ -354,13 +354,31 @@ gg_eps_marg_train_bootstrap <- ggplot(dfdf_eps_marg_train_bootstrap, aes(x=num_t
   annotate("rect", ymin=min(quantile_25), ymax=max(quantile_75), xmin=-Inf, xmax=Inf, fill = 'black', alpha=0.5) + 
   annotate("rect", ymin=min(quantile_05), ymax=max(quantile_95), xmin=-Inf, xmax=Inf, fill = 'black', alpha=0.4) + 
   xlab('$N_{train}$') + ylab('$\\epsilon_{marg}$') +
-  #xlab('x') + ylab('y') +
   geom_hline(yintercept = mean(eps_marg_train_traj_bootstrap), color = 'black', linetype = 'dashed', linewidth = 1) 
 gg_eps_marg_train_bootstrap
 
+Sys.setenv(PATH = paste("/usr/bin", Sys.getenv("PATH"), sep=":"))
 ## to tikZ
-#setwd(working_directory)
-#tikz(paste('gg_eps_marg_Nxtrain_bootstrap_beta',str_beta,'.tex', sep =''), standAlone = TRUE, width=4.0, height=2.0)
-#gg_eps_marg_train_bootstrap
-#dev.off()
-#tools::texi2dvi(paste('gg_eps_marg_Nxtrain_bootstrap_beta',str_beta,'.tex', sep =''),pdf=T)
+setwd(working_directory)
+tikz(paste('gg_eps_marg_Nxtrain_bootstrap_beta', str_beta, '.tex', sep = ''),
+  engine = "pdflatex", standAlone = TRUE, width = 4.0, height = 2.0)
+gg_eps_marg_train_bootstrap
+dev.off()
+
+mean(dfdf_eps_marg_train_bootstrap[dfdf_eps_marg_train_bootstrap$nPCs == 'nPC1 KDE joint' &
+                                dfdf_eps_marg_train_bootstrap$num_traj == 150,]$eps_marg)
+# [1] 48.71899 [1] 48.06571 [1] 48.65871    [1] 45.731 [1] 43.36803
+
+mean(dfdf_eps_marg_train_bootstrap[dfdf_eps_marg_train_bootstrap$nPCs == 'nPC2 KDE ind.' &
+                                     dfdf_eps_marg_train_bootstrap$num_traj == 150,]$eps_marg)
+# [1] 41.29602 [1] 39.13351 [1] 35.63201   [1] 35.92705 [1] 33.70485
+
+mean(dfdf_eps_marg_train_bootstrap[dfdf_eps_marg_train_bootstrap$nPCs == 'nPC2 KDE joint' &
+                                dfdf_eps_marg_train_bootstrap$num_traj == 150,]$eps_marg)
+# [1] 38.62171 [1] 34.14122 [1] 32.19588   [1] 31.17242 [1] 29.08053
+
+mean(dfdf_eps_marg_train_bootstrap[dfdf_eps_marg_train_bootstrap$nPCs == 'nPC3 KDE joint' &
+                                dfdf_eps_marg_train_bootstrap$num_traj == 150,]$eps_marg)
+# [1] 37.25396 [1] 33.88389 [1] 31.8589   [1] 29.94362 [1] 28.66324
+
+
