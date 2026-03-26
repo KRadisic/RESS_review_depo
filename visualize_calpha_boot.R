@@ -10,7 +10,8 @@ working_dir <- '~/Documents/RESS_review_depo/'
 setwd(working_dir)
 beta <- 0.005;
 str_beta <- '005'; 
-ml_coeff_multidx_r_TEST_boot <- read.csv(paste("ml_boot_multicoeff_c_alpha_OLS_TESTADD_of_R500_Ntrain50_dim6_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb",str_beta,"Nx_valid100.csv", sep=""), header = FALSE)
+Nx_boot <- 100
+ml_coeff_multidx_r_TEST_boot <- read.csv(paste("ml_boot_multicoeff_c_alpha_OLS_TESTADD_of_R500_dim6_pesh_profmoist_Jpce_errorLogN02_truerain53_Jb",str_beta,"Nx_", Nx_boot,".csv", sep=""), header = FALSE)
 coeff_multidx_r_TEST_boot <- data.frame(t(ml_coeff_multidx_r_TEST_boot)) 
 
 ## Get the degrees of the parameters in the basis
@@ -40,13 +41,13 @@ ggpairs(
     combo = wrap("dot", alpha = 0.1, size = 0.2))) + theme_bw()
 
 ## with legend
-ggpairs(
-  coeff_multidx_r_TEST_boot[, c("boot_idx", cols_fig8)], columns = 2:6,
-  aes(color = boot_idx, alpha = 0.5),
-  upper = list(continuous = wrap("density", alpha = 0.6), combo = "box"),
-  lower = list(continuous = function(data, mapping) {
-    ggplot(data, mapping) +
-      geom_point(pch = 1, alpha = 0.5, size = 1)}, 
-    combo = wrap("dot", alpha = 0.1, size = 0.2)), legend = 1) + theme_bw()+
-  theme(legend.position = 'bottom') +
-  guides(alpha = "none") 
+#ggpairs(
+#  coeff_multidx_r_TEST_boot[, c("boot_idx", cols_fig8)], columns = 2:6,
+#  aes(color = boot_idx, alpha = 0.5),
+#  upper = list(continuous = wrap("density", alpha = 0.6), combo = "box"),
+#  lower = list(continuous = function(data, mapping) {
+#    ggplot(data, mapping) +
+#      geom_point(pch = 1, alpha = 0.5, size = 1)}, 
+#    combo = wrap("dot", alpha = 0.1, size = 0.2)), legend = 1) + theme_bw()+
+#  theme(legend.position = 'bottom') +
+#  guides(alpha = "none") 

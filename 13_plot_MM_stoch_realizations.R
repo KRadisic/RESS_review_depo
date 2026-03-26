@@ -3,10 +3,11 @@
 #################################################
 rm(list=ls())
 
-working_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/"
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_libraries.R")
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
-setwd(paste(working_directory, "/scripts_PCE/metamodels/", sep=""))
+working_directory <- "~/Documents/RESS_review_depo/"
+
+source("~/Documents/RESS_review_depo/0_functions.R")
+setwd(working_directory)
+
 prior_distrib <- read.csv('prior_params_wo_bds145.csv',header = FALSE)
 vector_input_indices = c(63,68,72,99,71,65);
 df_prior <- data.frame(param = c('th9', 'mn10', 'th10', 'th13', 'thr10', 'hg10'),
@@ -15,8 +16,6 @@ df_prior <- data.frame(param = c('th9', 'mn10', 'th10', 'th13', 'thr10', 'hg10')
 
 ################################################
 ###    LOAD THE ROBUST CALIB RESULTS
-processed_data_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/processed/"
-setwd(processed_data_directory)
 
 ## Number of simulations of the metamodel for choosing robust calibration
 Nomega <- 500
@@ -43,11 +42,9 @@ head(df_minimizers)
 
 str_beta <- '005' # beta regularization as a character.
 ## load data
-setwd(paste(working_directory, "/scripts_PCE/metamodels/", sep=""))
 A_multidx <- read.csv(paste('union_reduced_A_basis_Jpce_errorLogN02_truerain53_Jb',str_beta,'.csv',sep=""), header = TRUE)
 prior_distrib <- read.csv('prior_params_wo_bds145.csv',header = FALSE)
 load(file = paste('c_alpha_KDE_new_beta', str_beta, '.RData', sep = "")) # c_alpha_KDE_new
-
 
 # A unique variable to be compatible with optimr package
 surrogate_cost_function_analytical_fixedrain_1input <- function(x)
@@ -156,7 +153,7 @@ dfdf_results <- merge(x = dfdf_results, y = dfdf_minimizers,
                       by.x = 'parameter.name', by.y = 'parameter.name')
 
 ######################################
-####    GG PLOT
+####    GG PLOT Figure 13
 colors_minimizers <- c('${x}^*_{\\hat{f}_s<0.01}$'= "#386cb0",'${x}^*_{\\hat{f}_s<0.02}$' = "#f0027f")
 minimizers_to_plot <-  c('${x}^*_{\\hat{f}_s<0.01}$','${x}^*_{\\hat{f}_s<0.02}$')
 
@@ -181,17 +178,6 @@ df_plot <- rbind(df_plot_none, df_plot_mid, df_plot_bottom)
 
 colors_minimizers <- c('${x}^*_{\\hat{f}_s<0.01}$'= "#386cb0",'${x}^*_{\\hat{f}_s<0.02}$' = "#f0027f",
                        '$\\hat{f}_s>0.02$' = 'gray25', '$\\hat{f}_s<0.02$' = '#fe7abf', '$\\hat{f}_s<0.01$' = '#709ad1')
-
-
-gg <- ggplot(data = df_plot, aes(x = variable, y = value.J, group = rain.idx, color = color.seuil)) + 
-  geom_line(alpha = 1) + theme_bw() +
-  geom_vline(aes(color = robust.level, xintercept = value.calib),linetype="dashed",linewidth = 1.0)+
-  facet_wrap(vars(parameter.name), scales = "free_x", ncol = 3) + xlab('') + ylab('') +
-  scale_color_manual('',values=colors_minimizers) + 
-  geom_hline(yintercept = 0.01, color="#386cb0",linetype="solid",linewidth = 1.0)+
-  geom_hline(yintercept = 0.02, color="#f0027f",linetype="solid",linewidth = 1.0)+
-  theme(legend.position = "bottom")   
-gg
 
 # louis
 gg <- ggplot() + 
@@ -225,8 +211,6 @@ n.dim <- 5 * 60 # number of parameter values per rain
 if (length(dfdf_pesh[,1]) != r.new.rains * n.dim){print('error dimensions')}
 
 ## read previous LHS (for other parameter values)
-raw_data_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw/"
-setwd(raw_data_directory)
 
 ## load an old LHS for the format
 old_LHS <- npyLoad("LHS_rep5_50_R500_dim6_sample_final.npy")
@@ -259,41 +243,3 @@ for (idx_r in 1:r.new.rains)
 #npySave(paste("LHS_MMtrajectories_LogN02_beta005_condmin",idx_of_conditional_minimizer,
 #              "_Nomega",Nomega,"_nlhs",n_lhs,
 #              "_dim6_sample_final.npy", sep=""), training_set_r)
-
-#################################################################
-## read the PESHMELBA simulations cost function in the test experimental design of the parameters
-setwd(paste(working_directory, "/data/raw/", sep=""))
-Y_test  <- npyLoad('Ymoisture_profile_LHS25_100_R198_dim6_YzeronS06_hourly.npy')
-true_rain_idx <- 53
-Y_true <- Y_test[true_rain_idx*100+1,]
-
-Y_new_traj <- npyLoad("Ymoisture_profile_MMs_traj_dim6_YzeronS06_LogN02.npy")
-
-setwd(paste(working_directory, "/data/processed/", sep=""))
-x_new_traj <- npyLoad('LHS_MMtrajectories_LogN02_beta005_condmin174_Nomega50_nlhs4500_dim6_sample_final.npy')[1:6000,] # plutot 50
-
-###############################
-## Calculate cost function
-if (length(Y_new_traj[1,]) != length(Y_true))
-{stop("Error : dimensions not matching")}
-delta_Y <- Y_new_traj - t(matrix(Y_true, length(Y_true),length(Y_new_traj[,1])))
-delta_Y2 <- delta_Y^2
-#  weights = c(0.5,1,2,3,4,5,6,10,15,20,25,30,35,40,45,50,55,65,75,100,150,200,250,300,400)
-weights <- rep(1,length(Y_new_traj[1,]))
-J_train <- delta_Y2%*%weights
-x_J_train_rains <- data.frame(th9   = x_new_traj[,63], 
-                              mn10  = x_new_traj[,68], 
-                              th10  = x_new_traj[,72], 
-                              th13  = x_new_traj[,99], 
-                              thr10 = x_new_traj[,71], 
-                              hg10  = x_new_traj[,65], 
-                              J0 = J_train) # ML order
-# Calculate the Jb term,regularization for mn and thetar
-Jb.train <- beta*(((x_J_train_rains$mn10 - df_prior$mean[2])/df_prior$sd[2])^2 +
-                    ((x_J_train_rains$thr10 - df_prior$mean[5])/df_prior$sd[5])^2)
-x_J_train_rains$J <- x_J_train_rains$J0 + Jb.train
-
-head(x_J_train_rains)
-head(dfdf_pesh)
-
-

@@ -1,20 +1,24 @@
-## plot eps margi wrt beta
+
 rm(list=ls())
-#source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
-#source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_libraries.R")
-#metamodel_folder <- '~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels/'
-#figures_plot <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/figures/"
-#excursion_set_results <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/processed/excursion_sets/"
+library('ggplot2')
+library('GGally')
+library('EQL') # hermite
+library('RcppCNPy') # open .npy data
+library('transport')  # For Wasserstein distance calculation
+library('boot')  # For  bootstrapping
+library('tikzDevice')
 
-metamodel_folder <- '~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels/'
-working_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/"
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_libraries.R")
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
-setwd(paste(working_directory, "/scripts_PCE/metamodels/", sep=""))
+#metamodel_folder <- '~/Documents/RESS_review_depo/metamodels/'
+working_directory <- '~/Documents/RESS_review_depo/'
 
-## fix beta
-beta <- 0.000
-str_beta <- '000'
+source("~/Documents/RESS_review_depo/0_functions.R")
+
+###########################################
+## Open the c_alpha train and validation from the OLS
+setwd(working_directory)
+beta <- 0.005;
+str_beta <- '005'; # 00, 002, 005, 01
+
 
 prior_distrib <- read.csv('prior_params_wo_bds145.csv',header = FALSE)
 vector_input_indices = c(63,68,72,99,71,65);
@@ -24,7 +28,6 @@ df_prior <- data.frame(param = c('th9', 'mn10', 'th10', 'th13', 'thr10', 'hg10')
 
 #################################################################
 ## read the PESHMELBA simulations cost function in the test experimental design of the parameters
-setwd(paste(working_directory, "/data/raw/", sep=""))
 
 ## read the observation
 Y_test  <- npyLoad('Ymoisture_profile_LHS25_100_R198_dim6_YzeronS06_hourly.npy')
@@ -96,15 +99,9 @@ for (n_boot in seq(1:NX_num_samples_boot)){
     data1 <- x_J_validation_rains[(boot_trajectories1-1)*100 + idx_test_x_param,]
     data2 <- x_J_validation_rains[(boot_trajectories2-1)*100 + idx_test_x_param,]
     
-    ## verify that they are identical
-    
     ## keep track of histogram in each of the parameter points
     data1_all_histograms <- cbind(data1_all_histograms, data1$J)
     data2_all_histograms  <- cbind(data2_all_histograms, data2$J)   
-    
-    ## Compare the two sets of data (two histograms) with a KS test.
-    kstest <- ks.test(data1$J, data2$J) # p-value small : probability of coming from the same distribution is small
-    #print(paste('idx_x = ', idx_test_x_param, 'p.val', kstest$p.value))
     
     ## Plot and save THE TWO HISTOGRAMS
     df <- data.frame(value_J = c(data1$J, data2$J), 
@@ -112,7 +109,7 @@ for (n_boot in seq(1:NX_num_samples_boot)){
     
     gg_hist <- ggplot(df, aes(x = value_J, y =..density.., fill = type, color = type)) + 
       geom_histogram(alpha = 0.2, position="identity", binwidth = 0.001) + theme_bw()  + xlim(c(0,0.15)) +  
-      ggtitle(paste('Comparison of histograms in test_point_idx = ',idx_test_x_param,'; KS p-val = ', trunc(100*kstest$p.value)/100,sep=''))
+      ggtitle(paste('Comparison of histograms in test_point_idx = ',idx_test_x_param, sep=''))
     gg_hist
     
     ## save figures
@@ -186,34 +183,6 @@ for (n_boot in seq(1:NX_num_samples_boot)){
 }
 
 # save the eps margi of bootstrapped validation
-setwd(metamodel_folder)
+#setwd(metamodel_folder)
 save(eps_marg_valid_bootstrap, file = paste('eps_marg_valid_bootstrap_beta',str_beta,'.RData', sep =''))
 
-quantile_95 <- quantile(eps_marg_valid_bootstrap, probs = 0.95)
-quantile_05 <- quantile(eps_marg_valid_bootstrap, probs = 0.05)
-
-quantile_25 <- quantile(eps_marg_valid_bootstrap, probs = 0.25)
-quantile_75 <- quantile(eps_marg_valid_bootstrap, probs = 0.75)
-
-#################################
-######       PLOTTING       #####
-#################################
-eps_marg_beta<- c()
-
-# read data
-setwd(metamodel_folder)
-for (beta in c(0,0.002,0.005,0.01)){
-  load(file = paste("eps_marg_beta", beta, ".RData"))
-  eps_marg_beta <- rbind(eps_marg_beta, c(beta, eps_marg)) 
-}
-
-# transform to data frame
-df_eps_marg_beta<- data.frame(eps_marg_beta)
-colnames(df_eps_marg_beta) <- c('beta', 'eps_marg')
-head(df_eps_marg_beta)
-
-# plot
-ggplot(df_eps_marg_beta, aes(x = beta, y = eps_marg)) + geom_point() + theme_bw() + 
-  geom_rect(aes(ymin=min(quantile_05), ymax=max(quantile_95), xmin=-Inf, xmax=Inf), alpha=0.1) + 
-  geom_rect(aes(ymin=min(quantile_25), ymax=max(quantile_75), xmin=-Inf, xmax=Inf), alpha=0.2) + 
-  geom_hline(yintercept = mean(eps_marg_valid_bootstrap), color = 'red') # choose the one corresponding to beta

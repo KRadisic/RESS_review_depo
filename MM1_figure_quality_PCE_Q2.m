@@ -8,11 +8,12 @@
 
 clearvars
 rng(100,'twister')
-cd '/home/katarina.radisic/UQLab_Rel2.0.0/core/'
+cd '/home/kradisic/Documents/my_UQLab_folder/UQLab_Rel2.2.0/core' 
+
 uqlab
-output_folder='/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels';
-code_folder = '/home/katarina.radisic/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/2_Robustness_scripts_Abasis';
-data_folder = '/home/katarina.radisic/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw';
+output_folder='/home/kradisic/Documents/RESS_review_depo/metamodels';
+code_folder = '/home/kradisic/Documents/RESS_review_depo/';
+data_folder = '/home/kradisic/Documents/RESS_review_depo/';
 
 %% Set data for the experimental design of the training set
 parcel_names = [545,530,480,503,526,527,481,524,525,529,544,539,528,523];
@@ -98,7 +99,7 @@ beta = 0.005;
 str_beta = '005';
 %%
 for N_train = 30:5:50 % number of simulation for PCE fitting
-    for r = 1:200 %1:198 % number of cost functions to minimize
+    for r = 1:200 % number training trajectories
 
         % add Jb on the cost function !!!!!!!!!!
         expdes_J_train = ((lhs_y_train(1:n_lhs_train,:) - ones(n_lhs_train,1)*y_true).^2)*weights' + ...
@@ -115,31 +116,8 @@ for N_train = 30:5:50 % number of simulation for PCE fitting
     end
 end
 
-%% Get R2 on train set of all the PCE metamodels
-coeff_R2_rains = []
-figure
 
-for r = 1:200%1:198 % number of cost functions to minimize
-    cd(output_folder)
-    load(strcat('myPCE_LARS_pesh_profmoist_Jpce_errorLogN02_truerain',int2str(true_rain_idx), ...
-        '_Jb',str_beta,'_Ridx', int2str(r),'_503.mat'))
-    % get R2
-    JLARS = uq_evalModel(myPCE_LARS,myPCE_LARS.ExpDesign.X);
-    Jval = myPCE_LARS.ExpDesign.Y;
-
-    plot(Jval,JLARS,'bo')
-    hold on
-    SSE = sum((Jval - JLARS).^2); 
-    SST = sum((Jval-mean(Jval)).^2);
-    coeff_R2 = 1 - SSE/SST
-    coeff_R2_rains = [coeff_R2_rains,coeff_R2];
-end
-%%
-find(coeff_R2_rains<0.95)
-coeff_R2_rains(coeff_R2_rains<0.95)
-
-
-%% Get R2 on metamodels (validate on the test set available)
+%% Get Q2 on metamodels (validate on the test set available)
 all_Q2_rains = []; N_tot_test = 100;
 N_valid = 100;      % number of simulation used for PCE fitting
 N_tot_valid = 100;  % number of simulations after which the rain changes

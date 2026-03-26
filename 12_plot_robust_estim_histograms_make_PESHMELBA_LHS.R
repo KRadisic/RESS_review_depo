@@ -4,8 +4,11 @@
 ###   - save parameter values in format for new PESHMELBA simulations
 ##################################################################
 rm(list=ls())
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_libraries.R")
-source("~/code/1_code_article_PhysicaD_lambdaOK_YzeronS06/SCRIPTS/0_functions.R")
+
+library('ggplot2')
+library('gridExtra') # grid.arrange
+
+source("~/Documents/RESS_review_depo/0_functions.R")
 
 excset_val1 <- 0.01
 excset_val2 <- 0.02
@@ -17,8 +20,6 @@ str_beta <- '005'
 beta <- 0.005
 
 ## Load admissible sets for each trajectory realization
-excursion_set_results <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/processed/excursion_sets/"
-setwd(excursion_set_results)
 load(paste("df_admissible_points_excset",excset_val1,"Nomega",Nomega,"_nLHS_eachLHS",n_lhs,".RData", sep = ""))
 load(paste("df_admissible_points_excset",excset_val2,"Nomega",Nomega,"_nLHS_eachLHS",n_lhs,".RData", sep = ""))
 
@@ -43,7 +44,6 @@ theta_k2
 ##########################################################
 #####    PLOT CONDITIONAL MINIMIZERS 
 #########################################################
-setwd("~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/scripts_PCE/metamodels/")
 df_min_LARS <- read.csv('conditional_minimizers_LARS_errorLogN02_Jb_beta005LHS_rep5_50_R500_Ntrain_hourly_BDDquantiles50.csv', header = TRUE)[1:200,]
 #df_min_LARS <- read.csv('conditional_minimizers_OLS_errorLogN02_Jb_beta0.005_LHS_rep5_50_R500_Ntrain_hourly_BDDquantiles50.csv', header = TRUE) 
 
@@ -60,8 +60,6 @@ df_cond_min <- df_cond_minimizers_LARS
 
 ######  ROBUST AND TRUE RESULTS AND FORMATTING FOR PLOT : VERTICAL LINES
 ## Load prior add true in dataframe for plotting
-working_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/"
-setwd(paste(working_directory, "/scripts_PCE/metamodels/", sep=""))
 prior_distrib <- read.csv('prior_params_wo_bds145.csv',header = FALSE)
 vector_input_indices = c(63,68,72,99,71,65);
 df_prior <- data.frame(param = c('th9', 'mn10', 'th10', 'th13', 'thr10', 'hg10'),
@@ -69,7 +67,6 @@ df_prior <- data.frame(param = c('th9', 'mn10', 'th10', 'th13', 'thr10', 'hg10')
                        sd =   prior_distrib[vector_input_indices,2])
 
 ## Load previous results from other robust calibrations ... Load true
-setwd('~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw/')
 x_test <- npyLoad("LHS25_100_R198_dim6_sample_final.npy")
 x_true <- x_test[1,c(63,68,72,99,71,65)] # matlab order
 
@@ -137,8 +134,6 @@ r.new.rains <- 500 # number of rains for same parameter values
 n.dim <- 5 # number of parameter values per rain
 
 ## read previous LHS (for other parameter values)
-raw_data_directory <- "~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/raw/"
-setwd(raw_data_directory)
 old_LHS <- npyLoad("LHS_rep5_50_R500_dim6_sample_final.npy")
 single_LHS <- old_LHS[1:n.dim, 1:145]
 
@@ -153,11 +148,11 @@ single_LHS[3, vector_input_indices] <- as.numeric(c(df_prior_true_mean$exc_set1,
 single_LHS[4, vector_input_indices] <- as.numeric(c(df_prior_true_mean$exc_set2, -3.50))
 single_LHS[5, vector_input_indices] <- as.numeric(c(df_prior_true_mean$mean, -3.50))
 
-#[1,] 0.3251800 0.1655000 0.3391800 0.2332000 0.07157900 -2.00
-#[2,] 0.3118763 0.1741481 0.3419935 0.2739860 0.06492179 -3.50
-#[3,] 0.3026490 0.1788592 0.3446818 0.2889340 0.06320647 -3.50 # <0.01
-#[4,] 0.3098395 0.1771087 0.3415738 0.2991149 0.07514100 -3.50 # <0.02
-#[5,] 0.3322500 0.1791000 0.3160100 0.3375000 0.06117900 -3.56
+#[1,] 0.3251800 0.1655000 0.3391800 0.2332000 0.07157900 -2.0
+#[2,] 0.3118763 0.1741481 0.3419935 0.2739860 0.06492179 -3.5
+#[3,] 0.3026490 0.1788592 0.3446818 0.2889340 0.06320647 -3.5 # <0.01
+#[4,] 0.3098395 0.1771087 0.3415738 0.2991149 0.07514100 -3.5 # <0.02
+#[5,] 0.3322500 0.1791000 0.3160100 0.3375000 0.06117900 -3.5
 
 head(single_LHS[,vector_input_indices])
 
@@ -170,10 +165,8 @@ for (idx_r in 1:r.new.rains)
 training_set_r[,72]
 
 ## Save new LHS
-processed_data_directory <- '~/Documents/Cours_presentations_formations/4_Presentation_poster_article/2_Conferences/JMSC_strasbourg_2024/data/processed/'
-setwd(processed_data_directory)
-npySave(paste("LHS_robust_minimizers_LogN02_beta005_condmin",idx_of_conditional_minimizer,
-              "_Nomega",Nomega,"_nlhs",n_lhs,
-              "_dim6_sample_final.npy", sep=""), training_set_r)
+#npySave(paste("LHS_robust_minimizers_LogN02_beta005_condmin",idx_of_conditional_minimizer,
+#              "_Nomega",Nomega,"_nlhs",n_lhs,
+#              "_dim6_sample_final.npy", sep=""), training_set_r)
 
 
