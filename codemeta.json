@@ -1,7 +1,7 @@
 {
     "@context": "https://doi.org/10.1016/j.ress.2026.112673",
     "@type": "SoftwareSourceCode",
-    "codeRepository": "git+https://github.com/KRadisic/metamodel_CATHY_AQUIGROW.git",
+    "codeRepository": "git+https://github.com/KRadisic/RESS_review_depo.git",
     "datePublished": "2026-04-19",
     "referencePublication": "https://doi.org/10.1016/j.ress.2026.112673",
     "programmingLanguage": [
