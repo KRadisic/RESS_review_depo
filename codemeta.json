@@ -5,6 +5,7 @@
     "codeRepository": "git+https://github.com/KRadisic/RESS_review_depo.git",
     "datePublished": "2026-04-19",
     "name": "Code for robust calibration of hydrological model",
+    "appicationCategory": "Calibration, metamodeling, hydrology, robust calibration",
     "referencePublication": "https://doi.org/10.1016/j.ress.2026.112673",
     "programmingLanguage": [
         "R", "Matlab"
