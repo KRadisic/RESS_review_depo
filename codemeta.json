@@ -1,8 +1,10 @@
 {
     "@context": "https://doi.org/10.1016/j.ress.2026.112673",
     "@type": "SoftwareSourceCode",
+    "license": "CC-BY",
     "codeRepository": "git+https://github.com/KRadisic/RESS_review_depo.git",
     "datePublished": "2026-04-19",
+    "name": "Code for robust calibration of hydrological model",
     "referencePublication": "https://doi.org/10.1016/j.ress.2026.112673",
     "programmingLanguage": [
         "R", "Matlab"
@@ -13,6 +15,6 @@
             "@id": "https://orcid.org/0009-0002-2514-5559",
             "givenName": "Katarina",
             "familyName": "Radisic"
-	}
+        }
     ]
 }
